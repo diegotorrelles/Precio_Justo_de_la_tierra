@@ -1,0 +1,809 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Precio Justo de la Tierra</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Figtree:wght@400;600;800&family=JetBrains+Mono:wght@700;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Plató de concurso de los 90: moqueta morada, luces doradas y etiquetas de precio. */
+:root{
+  --bg:#170d24; --panel:#23163a; --panel2:#2e1f4a; --line:#46336b;
+  --fg:#fbf3e4; --muted:#bfaed6; --gold:#ffc83d; --gold2:#ffdc7a;
+  --a:#ff5a5f; --b:#2ec4b6; --ok:#3fd17f; --bad:#ff6b6b; --ink:#140a1f;
+  --display:"Bungee", Impact, sans-serif;
+  --body:"Figtree", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.4;
+  background-image:radial-gradient(circle at 50% -20%, rgba(255,200,61,.18), transparent 55%),
+                   radial-gradient(circle at 1px 1px, rgba(251,243,228,.05) 1px, transparent 0);
+  background-size:auto, 22px 22px;
+  padding-block:14px 24px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.center{text-align:center}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);padding:.65em .95em;font-weight:700;transition:background .15s,transform .08s}
+button:hover{background:#3a2a5c}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.primary{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.primary:hover{background:var(--gold2)}
+.danger{background:#5a1f33;border-color:#8a2f4c}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row > button{flex:1 1 auto}
+.label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.small{font-size:.86rem;color:var(--muted);margin:0}
+.kbd{font-family:var(--mono);font-size:.7rem;opacity:.65;margin-left:.4em}
+.h{font-family:var(--display);font-weight:400;letter-spacing:.01em}
+.logo{font-family:var(--display);font-size:clamp(1.4rem,3.6vw,2.4rem);line-height:.95;margin:0;color:var(--gold);text-shadow:3px 3px 0 var(--a)}
+.logo small{display:block;font-size:.45em;color:var(--fg);text-shadow:none;letter-spacing:.12em;margin-top:.25em}
+.conn{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;color:var(--muted)}
+.conn i{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.conn.on i{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.conn.err i{background:var(--bad)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+
+/* ===== Presentador ===== */
+.wrap{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.round{font-family:var(--mono);font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.round b{color:var(--fg)}
+.game{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+@media (max-width:900px){.game{grid-template-columns:1fr}}
+.stage{position:relative;background:linear-gradient(180deg,#2a1a45,#1c1130);border:3px solid var(--gold);border-radius:16px;padding:clamp(16px,3vw,32px);
+  display:flex;flex-direction:column;gap:18px;min-width:0;box-shadow:0 0 0 6px rgba(255,200,61,.12), 0 20px 60px rgba(0,0,0,.5)}
+.bulbs{position:absolute;inset:-3px;border-radius:16px;pointer-events:none;
+  background:radial-gradient(circle,var(--gold2) 2px,transparent 3px) 0 0/26px 26px;
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 8px no-repeat, linear-gradient(#000 0 0) bottom/100% 8px no-repeat;mask:linear-gradient(#000 0 0) top/100% 8px no-repeat, linear-gradient(#000 0 0) bottom/100% 8px no-repeat;opacity:.55}
+.land{display:block;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 .35em}
+.prod{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(14px,3vw,30px);align-items:center}
+@media (max-width:600px){.prod{grid-template-columns:1fr;text-align:center}.prod .emo{margin:0 auto}}
+#stageBody{display:flex;flex-direction:column;gap:18px;min-width:0}
+.emo{--w:clamp(110px,18vw,190px);width:var(--w);height:var(--w);flex:none;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4a3478,#24163d);border:3px dashed rgba(255,200,61,.5);
+  display:flex;align-items:center;justify-content:center;font-size:calc(var(--w) / 4.4);line-height:1;white-space:nowrap;overflow:hidden}
+.pname{font-family:var(--display);font-size:clamp(1.35rem,3.4vw,2.4rem);line-height:1.08;margin:0;color:var(--fg);text-wrap:balance}
+.pdesc{font-size:clamp(1rem,1.7vw,1.2rem);color:var(--muted);margin:.5em 0 0;max-width:60ch;text-wrap:pretty}
+.bidrow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.bidrow{grid-template-columns:1fr}}
+.bid{border:2px solid var(--tc);border-radius:12px;padding:14px 16px;background:rgba(0,0,0,.25);display:flex;flex-direction:column;gap:6px;position:relative;min-width:0;transition:transform .3s, box-shadow .3s}
+.bid .who{font-weight:800;color:var(--tc);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.bid .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bid .val{font-family:var(--mono);font-weight:800;font-size:clamp(1.5rem,3.6vw,2.4rem);font-variant-numeric:tabular-nums;line-height:1.1;min-height:1.1em}
+.bid .val.wait{color:var(--muted);font-family:var(--body);font-size:1.05rem;font-weight:600}
+.bid .meta{font-size:.9rem;color:var(--muted);min-height:1.3em}
+.bid.win{transform:scale(1.03);box-shadow:0 0 0 3px var(--tc), 0 0 40px color-mix(in srgb, var(--tc) 60%, transparent)}
+.bid.lose{opacity:.6}
+.bid .badge{position:absolute;top:-12px;right:12px;background:var(--gold);color:var(--ink);font-family:var(--display);font-size:.85rem;padding:.2em .6em;border-radius:5px;transform:rotate(3deg)}
+.tag{align-self:center;position:relative;background:var(--gold);color:var(--ink);border-radius:10px 10px 10px 10px;padding:12px 26px 12px 44px;display:flex;flex-direction:column;align-items:center;
+  box-shadow:5px 5px 0 var(--a);clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 50%)}
+.tag::before{content:"";position:absolute;left:14px;top:50%;width:12px;height:12px;border-radius:50%;background:var(--panel);transform:translateY(-50%)}
+.tag .lab{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.tag .num{font-family:var(--mono);font-weight:800;font-size:clamp(2rem,6vw,4rem);line-height:1;font-variant-numeric:tabular-nums}
+.verdict{text-align:center;font-family:var(--display);font-size:clamp(1.2rem,3vw,2rem);color:var(--gold);margin:0;text-wrap:balance}
+.dato{text-align:center;font-size:.9rem;color:var(--muted);margin:0}
+.waitmsg{text-align:center;color:var(--muted);margin:0;font-size:1.05rem}
+.final{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:20px 0}
+.final .trophy{font-size:clamp(4rem,12vw,7rem);line-height:1}
+.final h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,5vw,3.2rem);margin:0;color:var(--gold);text-wrap:balance}
+aside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.teams{display:flex;flex-direction:column;gap:10px}
+.team{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto auto;gap:8px;align-items:center}
+.team .dot{width:12px;height:12px;border-radius:50%;background:var(--tc)}
+.team input{min-width:0;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--fg);font:inherit;font-weight:800;padding:.3em 0}
+.team .pts{font-family:var(--mono);font-weight:800;font-size:1.5rem;min-width:3ch;text-align:right;font-variant-numeric:tabular-nums}
+.team.lead .pts{color:var(--gold)}
+.team button{padding:.3em .55em;font-size:.8rem}
+.team .phones{grid-column:2 / -1;font-size:.78rem;color:var(--muted);margin-top:-6px}
+.team .phones.on{color:var(--ok)}
+.joins{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.join{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.join .who{font-weight:800;color:var(--tc);font-size:.9rem}
+.qr{background:#fff;padding:7px;border-radius:6px;width:132px;height:132px}
+.qr img,.qr canvas{width:118px!important;height:118px!important;image-rendering:pixelated}
+.code{font-family:var(--mono);font-size:.8rem;color:var(--muted);word-break:break-all}
+.manual{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.manual input,.pin input{width:100%;min-width:0;background:var(--ink);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:.6em .7em;font:inherit;font-family:var(--mono);font-weight:700}
+.switch{display:flex;align-items:center;gap:10px;font-size:.92rem;cursor:pointer}
+.switch input{width:20px;height:20px;accent-color:var(--gold)}
+details.card summary{cursor:pointer;font-weight:800;list-style:none;display:flex;justify-content:space-between}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:"+";font-family:var(--mono);color:var(--gold)}
+details.card[open] summary::after{content:"–"}
+.ladder{display:flex;gap:3px}
+@media (max-width:900px){
+  #ctrl{position:fixed;left:0;right:0;bottom:0;z-index:5;border-radius:16px 16px 0 0;border-bottom:0;gap:10px;
+    padding:12px max(16px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background:rgba(35,22,58,.96);backdrop-filter:blur(8px);box-shadow:0 -10px 30px rgba(0,0,0,.45)}
+  .wrap{padding-bottom:170px}
+  .kbd{display:none}
+}
+.ladder span{flex:1;height:8px;border-radius:2px;background:var(--line)}
+.ladder span.done{background:var(--gold)}
+.ladder span.now{background:var(--a)}
+
+.chooser{max-width:420px;margin:12vh auto 0;display:flex;flex-direction:column;gap:14px;text-align:center}
+.chooser button{font-size:1.15rem;padding:1em}
+.linkrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.linkrow input{min-width:0;background:var(--ink);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:.55em .7em;font:inherit;font-family:var(--mono);font-size:.78rem}
+/* ===== Móvil de equipo ===== */
+#team{max-width:520px;margin:0 auto;min-height:calc(100vh - 40px);display:flex;flex-direction:column;gap:16px}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ph .logo{font-size:1.35rem}
+.pick{display:flex;flex-direction:column;gap:12px}
+.pick button{font-size:1.25rem;padding:1em;border:2px solid var(--tc);text-align:left;display:flex;align-items:center;gap:12px}
+.pick button::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--tc);flex:none}
+.me{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--tc);border-radius:10px;padding:10px 14px}
+.me .n{font-weight:800;font-size:1.1rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me .p{font-family:var(--mono);font-weight:800;font-size:1.4rem;color:var(--tc)}
+.tprod{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.tprod .emo{--w:110px}
+.tprod .pname{font-size:1.35rem}
+.tprod .pdesc{font-size:.98rem;margin:0}
+.entry{display:flex;flex-direction:column;gap:10px}
+.money{display:flex;align-items:center;background:var(--ink);border:2px solid var(--tc);border-radius:12px;padding:4px 16px}
+.money input{flex:1;min-width:0;background:transparent;border:0;color:var(--fg);font-family:var(--mono);font-weight:800;font-size:2.1rem;padding:.25em 0;outline:none}
+.money span{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--tc)}
+.send{font-family:var(--display);font-weight:400;font-size:1.4rem;padding:.8em;background:var(--tc);border-color:var(--tc);color:var(--ink)}
+.send:hover{background:var(--tc);filter:brightness(1.1)}
+.tstatus{text-align:center;font-size:1rem;color:var(--muted);margin:0;min-height:1.4em}
+.tres{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.tres .big{font-family:var(--display);font-size:2rem;color:var(--gold);margin:0;line-height:1.1;text-wrap:balance}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini div{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--tc);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;gap:8px;min-width:0}
+.mini span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini b{font-family:var(--mono)}
+.pin{display:flex;flex-direction:column;gap:10px}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font-weight:600;align-self:center;padding:.3em}
+.linkbtn:hover{background:none;color:var(--fg)}
+.flash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22vw;pointer-events:none;opacity:0;z-index:9;text-shadow:4px 4px 0 var(--ink)}
+.flash.go{animation:flash 1.5s ease-out}
+.flash.good{color:var(--gold)}.flash.bad{color:var(--muted)}
+@keyframes flash{0%{opacity:0;transform:scale(.5)}15%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.pop{animation:pop .35s ease-out}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="chooser" class="chooser" hidden>
+  <h1 class="logo">El Precio Justo<small>DE LA TIERRA</small></h1>
+  <p class="small">¿Qué va a hacer este dispositivo?</p>
+  <button class="primary" type="button" data-role="equipo">Soy el móvil de un equipo</button>
+  <button type="button" data-role="presentador">Soy el presentador</button>
+</div>
+
+<!-- ================= PRESENTADOR ================= -->
+<div id="host" class="wrap" hidden>
+  <header class="top">
+    <h1 class="logo">El Precio Justo<small>DE LA TIERRA</small></h1>
+    <div class="round" id="round">Producto <b>1</b> de <b>20</b></div>
+    <div class="row" style="align-items:center">
+      <span class="conn" id="hConn"><i></i><span>Conectando…</span></span>
+      <button id="resetTop" type="button" title="Reiniciar partida">↺ Reiniciar</button>
+      <button id="fs" type="button">Pantalla completa</button>
+    </div>
+  </header>
+
+  <div class="game">
+    <section class="stage" id="stage" aria-live="polite">
+      <div class="bulbs"></div>
+      <div id="stageBody"></div>
+    </section>
+
+    <aside>
+      <div class="card" id="ctrl">
+        <div class="ladder" id="ladder"></div>
+        <div class="row">
+          <button class="primary" id="revealBtn" type="button">¡Destapar precio!<span class="kbd">Enter</span></button>
+        </div>
+        <div class="row">
+          <button id="prev" type="button">← Anterior<span class="kbd">P</span></button>
+          <button id="next" type="button">Siguiente →<span class="kbd">N</span></button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="label">Marcador</div>
+        <div class="teams" id="teams"></div>
+        <p class="small">Los botones ± corrigen puntos a mano. Toca el nombre para cambiarlo.</p>
+      </div>
+
+      <details class="card" id="joinBox" open>
+        <summary>Conectar los móviles</summary>
+        <div class="joins" id="joins"></div>
+        <p class="small">Cada equipo escanea su código con la cámara. Hay que tener sesión iniciada en Claude y acceso a esta página. Si el móvil no sabe de qué equipo es, se elige en pantalla.</p>
+        <div class="label">Enlace para los móviles</div>
+        <div class="linkrow"><input id="linkInput" aria-label="Enlace para los móviles" spellcheck="false"><button id="copy" type="button">Copiar</button></div>
+        <p class="small">Si compartes la página con otro enlace, pégalo aquí y los QR se actualizan.</p>
+      </details>
+
+      <details class="card">
+        <summary>Precio a mano (sin móvil)</summary>
+        <div id="manuals" style="display:flex;flex-direction:column;gap:10px"></div>
+      </details>
+
+      <details class="card">
+        <summary>Reglas y ajustes</summary>
+        <label class="switch"><input type="checkbox" id="strict"> Modo clásico: si te pasas, pierdes</label>
+        <p class="small">Gana la ronda el equipo que más se acerque: <b>100 pts</b>. Si además se queda a menos del 10 %: <b>+50</b>. A menos del 2 %: <b>¡Clavado!</b> 250 pts en total. Si empatan, puntúan los dos.</p>
+        <button class="danger" id="reset" type="button">Reiniciar partida</button>
+      </details>
+    </aside>
+  </div>
+</div>
+
+<!-- ================= EQUIPO ================= -->
+<div id="team" hidden>
+  <header class="ph">
+    <div class="logo">El Precio Justo</div>
+    <span class="conn" id="tConn"><i></i><span>Conectando…</span></span>
+  </header>
+
+  <div class="card pick" id="tPick" hidden>
+    <div class="label">¿De qué equipo eres?</div>
+    <button type="button" data-team="0" id="pickA" style="--tc:var(--a)">Equipo A</button>
+    <button type="button" data-team="1" id="pickB" style="--tc:var(--b)">Equipo B</button>
+  </div>
+
+  <div id="tPlay" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="me"><span class="n" id="tName"></span><span class="p" id="tPts">0</span></div>
+    <p class="small center" id="tWait" hidden></p>
+    <div class="card tprod" id="tProd"></div>
+    <div class="card entry" id="tEntry">
+      <div class="label" id="tEntryLab">¿Cuánto cuesta?</div>
+      <form id="bidForm" class="entry">
+        <div class="money"><input id="bidInput" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Tu precio en euros"><span>€</span></div>
+        <button class="send" id="sendBtn" type="submit">Apostar</button>
+      </form>
+      <p class="tstatus" id="tStatus"></p>
+    </div>
+    <div class="card tres" id="tRes" hidden></div>
+    <div class="mini" id="tMini"></div>
+    <button class="linkbtn" id="switch" type="button">Cambiar de equipo</button>
+  </div>
+  <div class="flash" id="flash"></div>
+</div>
+
+<script>
+/* ================= LOS 20 PRODUCTOS =================
+   land = tierra · e = emojis · name = producto · desc = chiste · price = precio justo (€) · dato = de dónde sale el precio */
+const PRODUCTS = [
+  { land:"Madrid", e:"🥖🦑🍋", name:"Bocadillo de calamares en La Campana (calle Botoneras)",
+    desc:"Pan, calamar y una servilleta que no da abasto. Comido de pie, mirando cómo un turista paga el triple sentado en la Plaza Mayor.",
+    price:4, dato:"Precio en barra de La Campana; las guías de 2026 lo sitúan entre 3,50 y 5 €." },
+  { land:"Las Palmas de Gran Canaria", e:"👠👑✨", name:"Entrada para la Gala Drag Queen del Carnaval 2026",
+    desc:"Plataformas de medio metro, purpurina hasta en el DNI y 3.000 entradas que volaron en 10 minutos. Pelucas de los asistentes no incluidas.",
+    price:15, dato:"Precio único oficial de la Gala Drag Queen 2026 (Atlántico Hoy). Se agotaron en 10 minutos." },
+  { land:"Albacete", e:"🔪🦌", name:"Navaja artesana de Albacete con cachas de asta de ciervo",
+    desc:"Hecha a mano por un navajero de tercera generación. Viene con la frase obligatoria: «en el AVE se puede llevar, si guardas el ticket».",
+    price:80, dato:"Navaja de asta de ciervo en Cuchillería Barbero (Albacete)." },
+  { land:"Donosti", e:"🧀🔥🍰", name:"Tarta de queso entera de La Viña (para unas 10 personas)",
+    desc:"Quemada por fuera, temblorosa por dentro. Medio planeta la ha copiado y la original sigue en la Parte Vieja.",
+    price:38, dato:"Tarta entera en La Viña, Parte Vieja de Donostia (precio publicado en prensa)." },
+  { land:"Salamanca", e:"🏛️🔍🐸", name:"Entrada a la Universidad de Salamanca para buscar la rana de la fachada",
+    desc:"La entrada general al edificio histórico. Encontrar la rana es gratis, pero hacerlo sin que un guía te la señale con un palo es otro nivel.",
+    price:10, dato:"Entrada general a las Escuelas Mayores en 2026 (reducida: 5 €)." },
+  { land:"La Gomera", e:"🧀🍯🌴", name:"Pack gomero: queso semicurado de cabra (1 kg) + bote de miel de palma (250 ml)",
+    desc:"El combo sagrado: queso de cabra de la isla con un chorro de miel de palma por encima. Si no lo has probado, no has ido a La Gomera.",
+    price:30.6, dato:"Queso gomero semicurado 1 kg (23,95 €, De La Tierra) + miel de palma El Masapé 250 ml (6,65 €, TuCanarias)." },
+  { land:"Pamplona", e:"🏠🐂👀", name:"Sitio en un balcón de la calle Estafeta para ver el encierro de San Fermín",
+    desc:"Por persona y por encierro. Desayuno buffet incluido para que veas pasar los toros en dos minutos con un cruasán en la mano.",
+    price:200, dato:"Balcón privado en Estafeta: 175–225 € por persona con desayuno y guía (guía Pixidia 2026). Punto medio." },
+  { land:"Mallorca", e:"🌀🧁📦", name:"Ensaimada grande lisa de pastelería de Palma, en su caja redonda",
+    desc:"Unos 40 cm de espiral de manteca y azúcar glas. Imposible subirla a un Ryanair sin una discusión en la puerta de embarque.",
+    price:19, dato:"Ensaimada grande en pastelería de Palma (guía de ensaimadas de Salir.com)." },
+  { land:"Bilbao", e:"👕🦁⚽", name:"Camiseta de la 1.ª equipación del Athletic 26/27 (aficionado, sin dorsal)",
+    desc:"Rayas rojiblancas. Para comprarla no hace falta nada. Para jugar con ella, haberte formado en Euskal Herria.",
+    price:95, dato:"Precio de salida en la tienda oficial del Athletic (mayo de 2026)." },
+  { land:"Cádiz", e:"🌅🍹🎶", name:"Entrada con copa para un tardeo en Sancti Petri",
+    desc:"Sol cayendo por el castillo, DJ pinchando a Camela en versión house y un cubata servido en vaso de plástico. Lo de «una y me voy» no se lo cree nadie.",
+    price:15, dato:"Referencia: entrada con una copa en el tardeo de un club de playa de Chiclana (15 €). Estimación para Sancti Petri." },
+  { land:"Córdoba", e:"🌙🕌🎧", name:"Visita nocturna «El Alma de Córdoba» a la Mezquita-Catedral",
+    desc:"La Mezquita de noche, con luces y audioguía. Para quien ya hizo la foto de los arcos de día y quiere repetirla con trípode.",
+    price:25, dato:"Precio general de la visita nocturna, web oficial de la Mezquita-Catedral (la entrada de día cuesta 15 €)." },
+  { land:"Mallorca", e:"⛱️🛏️🛏️", name:"Pack de dos tumbonas en Playa de Palma, un día de la temporada 2026",
+    desc:"Vistas al mar y a un turista color langostino que lleva ahí desde las 8 de la mañana.",
+    price:30, dato:"Tarifa del pack de dos tumbonas en Playa de Palma, temporada 2026." },
+  { land:"Las Palmas de Gran Canaria", e:"🏄🌊🦭", name:"Clase de surf de 2 horas en Las Canteras",
+    desc:"Con tabla, neopreno y un monitor que te dice «¡ahora, rema!» justo cuando ya es tarde. Terminarás tragando media playa.",
+    price:45, dato:"Curso de 2 h con la escuela oficial Quiksilver en Las Canteras: unos 80 AUD (≈ 45 €) en Wotif." },
+  { land:"Albacete", e:"🥐🍮✨", name:"Caja de 12 miguelitos de La Roda de crema",
+    desc:"Hojaldre, crema y un kilo de azúcar glas con destino tu camiseta negra. Parada obligatoria camino de la playa.",
+    price:8, dato:"Caja de 12 miguelitos de crema en la web de Miguelitos Ruiz (La Roda)." },
+  { land:"Pamplona", e:"🛏️🐂🧣", name:"Una cama en un dormitorio de 12 literas en pleno San Fermín",
+    desc:"Por noche. Incluye ronquidos en seis idiomas, olor a calimocho y un sueco que se levanta a las 6 para el encierro.",
+    price:100, dato:"Precio por cama en albergue durante San Fermín 2026 (guía de alojamiento Pixidia)." },
+  { land:"Donosti", e:"⭐⭐⭐🍽️", name:"Menú degustación en Arzak (3 estrellas Michelin), por persona y sin bebida",
+    desc:"Platos que parecen esculturas y raciones que parecen muestras. Saldrás feliz y con hueco para unos pintxos en la Parte Vieja.",
+    price:315, dato:"Precio del menú degustación en la web de Arzak: 315 € por persona, IVA incluido, bebidas aparte." },
+  { land:"Bilbao", e:"🐶🌸🏛️", name:"Entrada general al Museo Guggenheim Bilbao",
+    desc:"Lo de dentro está bien, pero seamos sinceros: has venido a hacerte la foto con Puppy y la araña gigante.",
+    price:18, dato:"Entrada general de adulto con audioguía (Pocket Spain, 2026)." },
+  { land:"Córdoba", e:"💃🔴⚫", name:"Traje de flamenca modelo «Piconera», rojo con lunares negros",
+    desc:"Para la Feria de Mayo de Córdoba. Cada volante cuenta, y se nota en la cuenta.",
+    price:529, dato:"Modelo Piconera rojo lunares negros en Tamara Flamenco." },
+  { land:"Salamanca", e:"🍖🐖🌰", name:"Jamón de bellota 100 % ibérico de Guijuelo, el elegido mejor de España en 2026",
+    desc:"Pieza entera de pata negra. Incluye un cuñado que insiste en cortarlo él aunque no sepa.",
+    price:450, dato:"Jamón de Bellota 100 % Ibérico Guillén (Guijuelo), premiado en 2026 (El Español)." },
+  { land:"Madrid", e:"🏢🔑🥲", name:"Piso de 70 m² de segunda mano en Chamberí",
+    desc:"Dos habitaciones, una de ellas «despacho». La cocina admite a una persona o a la nevera, pero no a las dos. Eso sí: es Chamberí.",
+    price:628000, dato:"70 m² × 8.971 €/m², precio medio de Chamberí según idealista (junio de 2026)." }
+];
+const TEAM_COLORS = ["#ff5a5f", "#2ec4b6"];
+const PTS_WIN = 100, PTS_NEAR = 50, PTS_EXACT = 250, NEAR = 0.10, EXACT = 0.02;
+
+/* ================= UTILIDADES ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+function eur(n){
+  const dec = Math.round(n * 100) % 100 !== 0, o = { minimumFractionDigits: dec ? 2 : 0, maximumFractionDigits: 2 };
+  let s;
+  try { s = n.toLocaleString("es-ES", { ...o, useGrouping: "always" }); } catch { s = n.toLocaleString("es-ES", o); }
+  if (/^\d{4}(,|$)/.test(s)) s = s.replace(/^(\d)(\d{3})/, "$1.$2");
+  return s + " €";
+}
+/* Acepta 628000 · 628.000 · 628 000 · 4,5 · 4.50 · 1.234,56 · 117,50€ */
+function parsePrice(raw){
+  let s = String(raw || "").replace(/[€\s]/g, "").replace(/[^\d.,]/g, "");
+  if (!s) return null;
+  if (s.includes(".") && s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (s.includes(",")) s = /^\d{1,3}(,\d{3})+$/.test(s) ? s.replace(/,/g, "") : s.replace(",", ".");
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+  const n = parseFloat(s);
+  return isFinite(n) && n >= 0 && n < 1e10 ? Math.round(n * 100) / 100 : null;
+}
+function setConn(el, state, txt){ el.className = "conn" + (state ? " " + state : ""); el.querySelector("span").textContent = txt; }
+const DEFAULT_LINK = "https://claude.ai/artifact/GVsZjtkXh3ZTeQ9GLDCRU7";
+const roomP = window.claude?.use ? window.claude.use("room").catch(() => null) : Promise.resolve(null);
+const newId = () => Math.random().toString(36).slice(2, 8);
+
+/* Puntuación de una ronda */
+function score(price, bids, strict){
+  const err = bids.map(b => b == null ? null : Math.abs(b - price) / Math.max(price, 0.01));
+  const over = bids.map(b => b != null && b > price);
+  const valid = bids.map((b, i) => b != null && !(strict && over[i]));
+  const dists = bids.map((b, i) => valid[i] ? Math.abs(b - price) : Infinity);
+  const best = Math.min(...dists);
+  const winners = best === Infinity ? [] : [0, 1].filter(i => dists[i] === best);
+  const deltas = [0, 0], tags = ["", ""];
+  winners.forEach(i => {
+    if (err[i] <= EXACT){ deltas[i] = PTS_EXACT; tags[i] = "¡CLAVADO!"; }
+    else if (err[i] <= NEAR){ deltas[i] = PTS_WIN + PTS_NEAR; tags[i] = "¡Afinadísimo!"; }
+    else { deltas[i] = PTS_WIN; tags[i] = "Más cerca"; }
+  });
+  [0, 1].forEach(i => { if (strict && over[i]) tags[i] = "Se ha pasado"; else if (bids[i] == null) tags[i] = "Sin apuesta"; });
+  return { winners, deltas, err, over, tags };
+}
+
+/* ================= ROL DEL DISPOSITIVO ================= */
+let role = null;
+function pickRole(){
+  const h = location.hash.replace("#", "");
+  if (h === "presentador") return "presentador";
+  if (h === "jugador" || h.startsWith("equipo")) return "equipo";
+  return matchMedia("(max-width: 700px)").matches ? null : "presentador";
+}
+function hashTeam(){
+  const m = location.hash.match(/equipo-([01])/);
+  return m ? +m[1] : null;
+}
+function startRole(r){
+  if (role) return;
+  role = r; $("chooser").hidden = true;
+  if (r === "equipo") startTeam(); else startHost();
+}
+
+/* ================= PRESENTADOR ================= */
+function startHost(){
+  $("host").hidden = false;
+  let S = store.get("pj-host2", null);
+  if (!S || !S.game){
+    S = { game: newId(), seq: 0, i: 0, teams: [{ name: "Equipo A", pts: 0 }, { name: "Equipo B", pts: 0 }],
+          bids: [null, null], rounds: {}, strict: false, final: false };
+  }
+  let link = store.get("pj-link", "") || DEFAULT_LINK;
+  const save = () => store.set("pj-host2", S);
+  save();
+  const roundKey = () => S.game + "-" + S.seq;
+  let room = null, playerPeers = [], otherHosts = 0, canPresent = true, anim = null;
+  const seen = new Map();
+
+  /* ---- sala en directo ---- */
+  function pub(){
+    const r = S.rounds[S.i];
+    return { game: S.game, round: roundKey(), i: S.i, n: PRODUCTS.length, final: S.final, strict: S.strict,
+      teams: S.teams.map(t => ({ name: t.name, pts: t.pts })),
+      bidded: S.bids.map(b => b != null),
+      rev: r ? { bids: r.bids, res: { winners: r.res.winners, deltas: r.res.deltas, tags: r.res.tags } } : null };
+  }
+  function broadcast(){
+    if (!room) return;
+    room.emit("state", pub()).catch(e => {
+      if (e && e.code === "not_permitted"){ canPresent = false; connText(); }
+    });
+  }
+  function connText(ok = room ? room.connected() : false){
+    if (!room) return setConn($("hConn"), "err", "Solo esta pantalla");
+    if (!canPresent) return setConn($("hConn"), "err", "Sin permiso para presentar");
+    if (otherHosts) return setConn($("hConn"), "err", "Hay otro presentador abierto");
+    setConn($("hConn"), ok ? "on" : "", ok ? "Sala abierta" : "Reconectando…");
+  }
+  roomP.then(r => {
+    if (!r){ connText(); renderTeams(); return; }
+    room = r;
+    room.presence({ role: "host" }).catch(() => {});
+    room.onConnection(ok => connText(ok), () => { room = null; connText(); renderTeams(); });
+    room.onPeers(ch => {
+      playerPeers = ch.peers.filter(p => p.presence?.role === "player" && (p.presence.team === 0 || p.presence.team === 1));
+      otherHosts = ch.peers.filter(p => p.presence?.role === "host" && !p.sameTab).length;
+      let changed = false;
+      for (const p of [...ch.joined, ...ch.updated]){
+        const pr = p.presence || {};
+        if (pr.role !== "player" || (pr.team !== 0 && pr.team !== 1)) continue;
+        const n = +pr.bseq || 0;
+        if (n <= (seen.get(p.peer) || 0)) continue;
+        seen.set(p.peer, n);
+        if (pr.round !== roundKey() || S.final || S.rounds[S.i]) continue;
+        const v = parsePrice(pr.bid); if (v == null) continue;
+        S.bids[pr.team] = v; changed = true;
+      }
+      for (const p of ch.left) seen.delete(p.peer);
+      if (changed){ save(); renderStage(); }
+      renderTeams(); connText();
+      if (changed || ch.joined.length) broadcast();
+    });
+    setInterval(broadcast, 2500);
+    broadcast();
+  });
+
+  /* ---- juego ---- */
+  function stopAnim(){ if (anim){ cancelAnimationFrame(anim); anim = null; } }
+  function go(i){
+    stopAnim();
+    S.final = false; S.i = Math.max(0, Math.min(PRODUCTS.length - 1, i)); S.seq++;
+    S.bids = S.rounds[S.i] ? S.rounds[S.i].bids.slice() : [null, null];
+    save(); render(); broadcast();
+  }
+  function reveal(){
+    if (S.final || S.rounds[S.i]) return;
+    const p = PRODUCTS[S.i], res = score(p.price, S.bids, S.strict);
+    res.deltas.forEach((d, k) => S.teams[k].pts += d);
+    S.rounds[S.i] = { bids: S.bids.slice(), res };
+    save(); render(true); broadcast();
+  }
+  function next(){
+    if (S.final) return;
+    if (!S.rounds[S.i]){ reveal(); return; }
+    if (S.i === PRODUCTS.length - 1){ S.final = true; save(); render(); broadcast(); return; }
+    go(S.i + 1);
+  }
+  function resetGame(){
+    stopAnim();
+    S.game = newId(); S.seq = 0; S.i = 0; S.final = false; S.rounds = {}; S.bids = [null, null];
+    S.teams.forEach(t => t.pts = 0);
+    save(); render(); broadcast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  /* Confirmación sin diálogos del navegador: primer toque arma, segundo reinicia */
+  function armReset(btn){
+    if (btn.dataset.armed){
+      clearTimeout(btn._t); delete btn.dataset.armed;
+      btn.textContent = btn.dataset.label; btn.classList.remove("danger");
+      resetGame(); return;
+    }
+    btn.dataset.label = btn.dataset.label || btn.textContent;
+    btn.dataset.armed = "1"; btn.textContent = "¿Seguro? Toca otra vez"; btn.classList.add("danger");
+    btn._t = setTimeout(() => { delete btn.dataset.armed; btn.textContent = btn.dataset.label; btn.classList.remove("danger"); }, 4000);
+  }
+
+  /* ---- pintar ---- */
+  function render(animate){ renderStage(animate); renderTeams(); renderControls(); }
+  function renderControls(){
+    $("round").innerHTML = S.final ? "<b>Final</b>" : `Producto <b>${S.i + 1}</b> de <b>${PRODUCTS.length}</b>`;
+    $("ladder").innerHTML = PRODUCTS.map((_, k) => `<span class="${k === S.i && !S.final ? "now" : S.rounds[k] ? "done" : ""}"></span>`).join("");
+    const done = !!S.rounds[S.i];
+    $("revealBtn").disabled = S.final || done;
+    $("revealBtn").firstChild.textContent = S.final ? "Partida terminada" : done ? "Precio destapado" : "¡Destapar precio!";
+    $("prev").disabled = S.i === 0 && !S.final;
+    $("next").firstChild.textContent = S.final ? "Fin" : !done ? "Destapar →" : S.i === PRODUCTS.length - 1 ? "Ver ganador →" : "Siguiente →";
+    $("next").disabled = S.final;
+    $("strict").checked = S.strict;
+    $("manuals").innerHTML = S.teams.map((t, k) => `
+      <div class="manual" style="--tc:${TEAM_COLORS[k]}">
+        <input data-man="${k}" inputmode="decimal" placeholder="Precio de ${esc(t.name)}" aria-label="Precio de ${esc(t.name)}" ${done || S.final ? "disabled" : ""}>
+        <button type="button" data-mset="${k}" ${done || S.final ? "disabled" : ""}>Fijar</button>
+      </div>`).join("");
+  }
+  function phonesText(k){
+    if (!room) return "Sin conexión en directo";
+    const n = playerPeers.filter(p => p.presence.team === k).length;
+    return (n ? `📱 ${n} móvil${n > 1 ? "es" : ""} conectado${n > 1 ? "s" : ""}` : "Sin móvil conectado") +
+      (!S.final && !S.rounds[S.i] && S.bids[k] != null ? " · ✓ ha apostado" : "");
+  }
+  function renderTeams(){
+    const lead = Math.max(...S.teams.map(t => t.pts));
+    const box = $("teams");
+    if (box.children.length !== S.teams.length){
+      box.innerHTML = S.teams.map((t, k) => `
+        <div class="team" style="--tc:${TEAM_COLORS[k]}">
+          <span class="dot"></span>
+          <input value="${esc(t.name)}" data-name="${k}" aria-label="Nombre del equipo ${k + 1}" maxlength="24">
+          <span class="pts"></span>
+          <button type="button" data-adj="${k}" data-v="50" aria-label="Sumar 50">+50</button>
+          <button type="button" data-adj="${k}" data-v="-50" aria-label="Restar 50">−50</button>
+          <span class="phones"></span>
+        </div>`).join("");
+    }
+    [...box.children].forEach((row, k) => {
+      const t = S.teams[k];
+      row.classList.toggle("lead", t.pts === lead && lead > 0);
+      row.querySelector(".pts").textContent = t.pts;
+      const inp = row.querySelector("input");
+      if (document.activeElement !== inp && inp.value !== t.name) inp.value = t.name;
+      const ph = row.querySelector(".phones");
+      ph.textContent = phonesText(k);
+      ph.classList.toggle("on", !!room && playerPeers.some(p => p.presence.team === k));
+    });
+  }
+  function renderJoins(){
+    $("linkInput").value = link;
+    $("joins").innerHTML = S.teams.map((t, k) => `
+      <div class="join" style="--tc:${TEAM_COLORS[k]}">
+        <span class="who">${esc(t.name)}</span>
+        <div class="qr" id="qr${k}"></div>
+      </div>`).join("");
+    S.teams.forEach((_, k) => {
+      const url = link + "#equipo-" + k;
+      try { new QRCode($("qr" + k), { text: url, width: 118, height: 118, colorDark: "#140a1f", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M }); }
+      catch { $("qr" + k).textContent = "QR no disponible"; }
+    });
+  }
+  function renderStage(animate){
+    const box = $("stageBody");
+    if (S.final){
+      const [a, b] = S.teams, tie = a.pts === b.pts, w = a.pts > b.pts ? a : b;
+      box.innerHTML = `<div class="final pop">
+        <div class="trophy">🏆</div>
+        <div class="label">Fin de la partida</div>
+        <h2>${tie ? "¡Empate técnico!" : "¡Gana " + esc(w.name) + "!"}</h2>
+        <div class="bidrow" style="width:min(100%,560px)">${S.teams.map((t, k) => `
+          <div class="bid ${!tie && t === w ? "win" : ""}" style="--tc:${TEAM_COLORS[k]}"><div class="who"><span>${esc(t.name)}</span></div><div class="val">${t.pts} pts</div></div>`).join("")}</div>
+        <button class="primary" id="again" type="button">Jugar otra vez</button>
+      </div>`;
+      $("again").onclick = resetGame;
+      return;
+    }
+    if (anim) return; // no pisar la animación del precio
+    const p = PRODUCTS[S.i], r = S.rounds[S.i];
+    box.innerHTML = `
+      <div class="prod">
+        <div class="emo" aria-hidden="true">${p.e}</div>
+        <div><span class="land">📍 ${esc(p.land)}</span><h2 class="pname">${esc(p.name)}</h2><p class="pdesc">${esc(p.desc)}</p></div>
+      </div>
+      ${r ? `<div class="tag pop" aria-label="Precio justo"><span class="lab">Precio justo</span><span class="num" id="priceNum">${animate ? "0 €" : eur(p.price)}</span></div>` : ""}
+      <div class="bidrow">${S.teams.map((t, k) => bidBox(t, k, r, animate)).join("")}</div>
+      ${r ? `<p class="verdict" id="verdict" ${animate ? "hidden" : ""}>${verdictText(r.res)}</p><p class="dato" id="dato" ${animate ? "hidden" : ""}>ℹ️ ${esc(p.dato)}</p>`
+          : `<p class="waitmsg">${S.bids.every(b => b != null) ? "Los dos equipos han apostado. ¡A destapar!" : "Esperando los precios de los equipos…"}</p>`}`;
+    if (r && animate) runCounter(p.price);
+  }
+  function bidBox(t, k, r, animate){
+    const b = r ? r.bids[k] : S.bids[k];
+    let cls = "", val, meta = "", badge = "";
+    if (!r){ val = b != null ? `<div class="val">🔒 Apostado</div>` : `<div class="val wait">Pensando…</div>`; }
+    else {
+      const res = r.res, won = res.winners.includes(k);
+      cls = animate ? "" : won ? "win" : "lose";
+      val = `<div class="val">${b != null ? eur(b) : "—"}</div>`;
+      if (b != null) meta = errText(res.over[k], res.err[k]);
+      if (won && !animate) badge = `<span class="badge">+${res.deltas[k]}</span>`;
+    }
+    return `<div class="bid ${cls}" data-bid="${k}" style="--tc:${TEAM_COLORS[k]}">${badge}
+      <div class="who"><span>${esc(t.name)}</span></div>${val}<div class="meta" data-meta="${k}" ${r && animate ? "hidden" : ""}>${meta}</div></div>`;
+  }
+  function verdictText(res){
+    if (!res.winners.length) return "Nadie puntúa: ¡os habéis pasado los dos!";
+    if (res.winners.length === 2) return `¡Empate! ${res.tags[0]} para los dos`;
+    const k = res.winners[0];
+    return `${res.tags[k]} · ${esc(S.teams[k].name)} +${res.deltas[k]}`;
+  }
+  function runCounter(price){
+    const t0 = performance.now(), dur = price > 1000 ? 2600 : 1900;
+    const step = now => {
+      const x = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - x, 3);
+      const v = x < 1 ? (price >= 100 ? Math.round(price * e) : Math.round(price * e * 100) / 100) : price;
+      const el = $("priceNum"); if (el) el.textContent = eur(v);
+      if (x < 1) anim = requestAnimationFrame(step);
+      else { anim = null; finishReveal(); }
+    };
+    anim = requestAnimationFrame(step);
+  }
+  function finishReveal(){
+    const r = S.rounds[S.i]; if (!r) return;
+    document.querySelectorAll("[data-bid]").forEach(el => {
+      const k = +el.dataset.bid, won = r.res.winners.includes(k);
+      el.classList.add(won ? "win" : "lose");
+      if (won) el.insertAdjacentHTML("afterbegin", `<span class="badge">+${r.res.deltas[k]}</span>`);
+    });
+    document.querySelectorAll("[data-meta]").forEach(el => el.hidden = false);
+    ["verdict", "dato"].forEach(id => { const e = $(id); if (e){ e.hidden = false; e.classList.add("pop"); } });
+  }
+
+  /* ---- eventos ---- */
+  $("revealBtn").onclick = reveal;
+  $("next").onclick = next;
+  $("prev").onclick = () => S.final ? (S.final = false, go(S.i)) : go(S.i - 1);
+  $("reset").onclick = e => armReset(e.currentTarget);
+  $("resetTop").onclick = e => armReset(e.currentTarget);
+  $("strict").onchange = e => { S.strict = e.target.checked; save(); broadcast(); };
+  $("fs").onclick = () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {}); else document.exitFullscreen?.(); };
+  $("teams").addEventListener("input", e => {
+    const k = e.target.dataset.name; if (k == null) return;
+    S.teams[+k].name = e.target.value.slice(0, 24) || `Equipo ${"AB"[+k]}`; save(); broadcast();
+    if (!S.final && !anim) renderStage();
+    renderControls();
+    document.querySelectorAll("#joins .who").forEach((el, j) => el.textContent = S.teams[j].name);
+  });
+  $("teams").addEventListener("click", e => {
+    const b = e.target.closest("[data-adj]"); if (!b) return;
+    S.teams[+b.dataset.adj].pts += +b.dataset.v; save(); renderTeams(); broadcast();
+  });
+  $("manuals").addEventListener("click", e => {
+    const b = e.target.closest("[data-mset]"); if (!b) return;
+    const k = +b.dataset.mset, inp = document.querySelector(`[data-man="${k}"]`), v = parsePrice(inp.value);
+    if (v == null) return;
+    S.bids[k] = v; save(); renderStage(); renderTeams(); broadcast();
+    inp.value = "";
+  });
+  $("linkInput").addEventListener("change", e => {
+    const v = e.target.value.trim().split("#")[0];
+    link = /^https:\/\//.test(v) ? v : DEFAULT_LINK;
+    store.set("pj-link", link === DEFAULT_LINK ? "" : link); renderJoins();
+  });
+  $("copy").onclick = () => {
+    const done = () => { $("copy").textContent = "Copiado"; setTimeout(() => $("copy").textContent = "Copiar", 1600); };
+    try { navigator.clipboard.writeText(link).then(done, () => $("linkInput").select()); } catch { $("linkInput").select(); }
+  };
+  document.addEventListener("keydown", e => {
+    if (e.target.matches("input")) return;
+    if (e.key === "Enter"){ e.preventDefault(); reveal(); }
+    else if (e.key === "n" || e.key === "N" || e.key === "ArrowRight") next();
+    else if (e.key === "p" || e.key === "P" || e.key === "ArrowLeft") $("prev").click();
+  });
+
+  render(); renderJoins(); connText();
+}
+
+function errText(over, err){
+  const pct = err * 100;
+  return `${over ? "Se pasa" : "Se queda corto"} ${pct < 0.05 ? "0" : pct < 10 ? pct.toFixed(1).replace(".", ",") : Math.round(pct).toLocaleString("es-ES")} %`;
+}
+
+/* ================= MÓVIL DE EQUIPO ================= */
+function startTeam(){
+  $("team").hidden = false;
+  const fromHash = hashTeam();
+  let myTeam = fromHash != null ? fromHash : store.get("pj-myteam", null);
+  if (fromHash != null) store.set("pj-myteam", fromHash);
+  let room = null, S = null, hostSeen = 0, bseq = 0, myBid = null, lastRevRound = null;
+
+  function send(){
+    if (!room) return;
+    room.presence({ role: "player", team: myTeam, round: myBid ? myBid.round : (S ? S.round : null), bid: myBid ? myBid.v : null, bseq }).catch(() => {});
+  }
+  function flash(txt, good){
+    const f = $("flash"); f.textContent = txt; f.className = "flash " + (good ? "good" : "bad");
+    void f.offsetWidth; f.classList.add("go");
+    try { navigator.vibrate?.(good ? [70, 40, 70] : 200); } catch {}
+  }
+  function onState(ns){
+    const prev = S; S = ns; hostSeen = Date.now();
+    if (!prev || prev.round !== S.round){
+      if (myBid && myBid.round !== S.round){ myBid = null; }
+      send();
+    }
+    if (S.rev && prev && prev.round === S.round && !prev.rev && myTeam != null && lastRevRound !== S.round){
+      const d = S.rev.res.deltas[myTeam];
+      flash(d > 0 ? "+" + d : "😬", d > 0);
+    }
+    if (S.rev) lastRevRound = S.round;
+    render();
+  }
+
+  function wait(msg){
+    $("tWait").hidden = false; $("tWait").innerHTML = msg;
+    $("tProd").hidden = true; $("tEntry").hidden = true; $("tRes").hidden = true;
+  }
+  function render(){
+    $("tPick").hidden = myTeam != null;
+    $("tPlay").hidden = myTeam == null;
+    if (S){ $("pickA").textContent = S.teams[0].name; $("pickB").textContent = S.teams[1].name; }
+    if (myTeam == null) return;
+    const me = myTeam;
+    document.documentElement.style.setProperty("--tc", TEAM_COLORS[me]);
+    $("tName").textContent = S ? S.teams[me].name : "Equipo " + "AB"[me];
+    $("tPts").textContent = S ? S.teams[me].pts : "–";
+    $("tMini").innerHTML = S ? S.teams.map((t, k) => `<div style="--tc:${TEAM_COLORS[k]}"><span>${esc(t.name)}</span><b>${t.pts}</b></div>`).join("") : "";
+    if (!room) return wait("<b>Sin conexión.</b> Abre este enlace con tu cuenta de Claude iniciada para unirte a la partida.");
+    if (!S || Date.now() - hostSeen > 9000) return wait("<b>Esperando al presentador…</b> Cuando abra el juego, esta pantalla se activa sola.");
+    $("tWait").hidden = true; $("tProd").hidden = false;
+
+    if (S.final){
+      const [a, b] = S.teams, tie = a.pts === b.pts, w = a.pts > b.pts ? 0 : 1;
+      $("tProd").innerHTML = `<div style="font-size:4rem">🏆</div><h2 class="pname">${tie ? "¡Empate!" : w === me ? "¡Habéis ganado!" : "Gana " + esc(S.teams[w].name)}</h2><p class="pdesc">${a.pts} – ${b.pts}</p>`;
+      $("tEntry").hidden = true; $("tRes").hidden = true;
+      return;
+    }
+    const p = PRODUCTS[S.i];
+    if (!p) return wait("Producto desconocido. Recarga la página.");
+    $("tProd").innerHTML = `<div class="emo" aria-hidden="true">${p.e}</div>
+      <div><span class="land">📍 ${esc(p.land)}</span><h2 class="pname">${esc(p.name)}</h2></div><p class="pdesc">${esc(p.desc)}</p>
+      <span class="small">Producto ${S.i + 1} de ${S.n}${S.strict ? " · si os pasáis, perdéis" : ""}</span>`;
+
+    if (S.rev){
+      $("tEntry").hidden = true; $("tRes").hidden = false;
+      const r = S.rev, mine = r.bids[me], other = r.bids[1 - me], d = r.res.deltas[me];
+      const over = mine != null && mine > p.price, err = mine != null ? Math.abs(mine - p.price) / Math.max(p.price, 0.01) : 0;
+      $("tRes").innerHTML = `<div class="label">Precio justo</div>
+        <div class="tag"><span class="num" style="font-size:2.4rem">${eur(p.price)}</span></div>
+        <p class="big">${d > 0 ? r.res.tags[me] + " +" + d : mine == null ? "No apostasteis" : r.res.tags[me] === "Se ha pasado" ? "Os habéis pasado" : "Esta vez no"}</p>
+        <p class="small">Vuestro precio: <b>${mine != null ? eur(mine) : "—"}</b>${mine != null ? " (" + errText(over, err).toLowerCase() + ")" : ""} · ${esc(S.teams[1 - me].name)}: <b>${other != null ? eur(other) : "—"}</b></p>
+        <p class="small">ℹ️ ${esc(p.dato)}</p>`;
+      return;
+    }
+    $("tEntry").hidden = false; $("tRes").hidden = true;
+    const sent = myBid && myBid.round === S.round ? myBid.v : null;
+    const confirmed = S.bidded[me];
+    $("tEntryLab").textContent = sent != null ? (confirmed ? "Precio enviado" : "Enviando…") : "¿Cuánto cuesta?";
+    $("sendBtn").textContent = confirmed || sent != null ? "Cambiar precio" : "Apostar";
+    $("tStatus").textContent = sent != null
+      ? (confirmed ? `Habéis dicho ${eur(sent)}. Podéis cambiarlo hasta que se destape.` : `Enviando ${eur(sent)} al presentador…`)
+      : confirmed ? "Vuestro equipo ya ha apostado desde otro móvil."
+      : S.bidded[1 - me] ? `${S.teams[1 - me].name} ya ha apostado. ¡Venga!` : "Escribid el precio y dadle a Apostar.";
+  }
+
+  $("bidForm").onsubmit = e => {
+    e.preventDefault();
+    const v = parsePrice($("bidInput").value);
+    if (v == null){ $("tStatus").textContent = "Escribe un número, por ejemplo 12,50"; return; }
+    if (!room || !S){ $("tStatus").textContent = "Todavía no hay conexión con el presentador."; return; }
+    if (S.rev || S.final) return;
+    myBid = { round: S.round, v }; bseq++; send();
+    $("bidInput").value = ""; $("bidInput").blur();
+    try { navigator.vibrate?.(40); } catch {}
+    render();
+  };
+  document.querySelectorAll("#tPick [data-team]").forEach(b => b.onclick = () => {
+    myTeam = +b.dataset.team; store.set("pj-myteam", myTeam); myBid = null; send(); render();
+  });
+  $("switch").onclick = () => { myTeam = null; store.set("pj-myteam", null); myBid = null; send(); render(); };
+
+  roomP.then(r => {
+    if (!r){ setConn($("tConn"), "err", "Sin conexión"); render(); return; }
+    room = r;
+    room.onConnection(ok => setConn($("tConn"), ok ? "on" : "", ok ? "Conectado" : "Reconectando…"),
+      () => { room = null; setConn($("tConn"), "err", "Sin conexión"); render(); });
+    room.on("state", msg => {
+      const d = msg.data;
+      if (!d || typeof d !== "object" || !Array.isArray(d.teams) || d.teams.length !== 2 || !Number.isInteger(d.i)) return;
+      onState(d);
+    });
+    send(); render();
+  });
+  let wasStale = true;
+  setInterval(() => { const stale = !S || Date.now() - hostSeen > 9000; if (stale !== wasStale){ wasStale = stale; render(); } }, 3000);
+  render();
+}
+
+document.querySelectorAll("#chooser [data-role]").forEach(b => b.onclick = () => startRole(b.dataset.role));
+const initialRole = pickRole();
+if (initialRole) startRole(initialRole); else $("chooser").hidden = false;
+addEventListener("hashchange", () => { const r = pickRole(); if (r && r !== role) location.reload(); });
+</script>
+
+</body></html>
